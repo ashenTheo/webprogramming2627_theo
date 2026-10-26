@@ -1,11 +1,52 @@
-import {useState} from 'react'
-import { Form, InputGroup, Modal, Button, Table, ProgressBar } from 'react-bootstrap';
-
-function TransactionManager() {
+import {useState} from 'react';
+import { useState, useEffect } from 'react';
+import {Form, InputGroup, Modal, Button, Table, ProgressBar}from 'react-bootstrap';
+// const s = useState(false)
+// const t = useState([])
+export default function TransactionManager() {
   const [show, setShow] = useState(false);
-
+  const [transaksi, setTransaksi] = useState([])
+  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  {/*
+  const ambilData = () => {
+    fetch('http://localhost:3000/transaksi')
+    .then ((response) => response.json())
+    .then((data) => {
+      console.log('Data diterima:', data)
+      setTransaksi(data)
+    })
+    .catch((error) => {
+      console.error('Terjadi Kesalahan saat mengambil data:', error);
+    });
+  };
+
+  */}
+
+  const ambilDataAsync = async () =>{
+    try {
+      const response = await fetch('http://localhost:3000/transaksi');
+      if (!response.ok) {
+        throw new Error ('Gagal mengambil data dari server');
+      }
+
+      const data = await response.json()
+      console.log ('Data diterima:', data);
+      setTransaksi(data);
+    } catch (error) {
+      console.error('Error:', error.message);
+    };
+  };
+
+  useEffect(() => {
+    {/*
+      ambilData();
+    */}
+      ambilDataAsync();
+    }, []
+  )
 
   return (
     <div className="container mt-4">
@@ -18,8 +59,8 @@ function TransactionManager() {
 
       <ProgressBar now={75} label="75%" variant="warning" className="mb-4" />
 
-      {/* Tabel Data Transaksi */}
       <Table striped bordered hover responsive>
+        {/* <AppNavigation /> */}
         <thead>
           <tr>
             <th>#</th>
@@ -29,16 +70,27 @@ function TransactionManager() {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {
+            transaksi.map(
+              (item, index) => (
+                <tr key={item.id || index}>
+                  <td>{index + 1}</td>
+                  <td>{item.keterangan}</td>
+                  <td>{item.kategori}</td>
+                  <td>{item.nominal}</td>
+                </tr>
+              )
+            )
+          }
+          {/* <tr>
             <td>1</td>
             <td>Belanja Bulanan</td>
             <td>Pengeluaran</td>
             <td>Rp 750.000</td>
-          </tr>
+          </tr> */}
         </tbody>
       </Table>
 
-      {/* Modal Form Tambah Transaksi */}
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Catat Transaksi Baru</Modal.Title>
@@ -49,7 +101,6 @@ function TransactionManager() {
               <Form.Label>Keterangan</Form.Label>
               <Form.Control type="text" placeholder="Misal: Bensin" />
             </Form.Group>
-
             <Form.Group className="mb-3">
               <Form.Label>Nominal</Form.Label>
               <InputGroup>
@@ -71,7 +122,3 @@ function TransactionManager() {
     </div>
   );
 }
-//aaaa
-export default TransactionManager;
-import {Form, InputGroup, Modal, Button, Table, ProgressBar}
-const [show, setShow] = useState(false)
