@@ -1,4 +1,3 @@
-// src/component/FormTambahTransaksi.jsx
 import { useState } from 'react';
 import { Button, Alert, Spinner, Form } from 'react-bootstrap';
 
@@ -8,7 +7,6 @@ function FormTambahTransaksi() {
   const [error, setError] = useState(null);
   const [sukses, setSukses] = useState(false);
 
-  // Event Handler Asinkron untuk Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -16,7 +14,6 @@ function FormTambahTransaksi() {
     setSukses(false);
 
     try {
-      // Simulasi pengiriman HTTP POST Request ke Server/API
       const response = await
       fetch('https://api.example.com/transaksi', {
         method: 'POST',
@@ -31,11 +28,11 @@ function FormTambahTransaksi() {
       }
 
       setSukses(true);
-      setNominal(''); // Reset form
+      setNominal(''); 
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false); // Matikan status loading baik sukses maupun gagal
+      setLoading(false);
     }
   };
 
@@ -55,7 +52,6 @@ function FormTambahTransaksi() {
         />
       </Form.Group>
 
-      {/* Button interaktif merespon status loading */}
       <Button variant="primary" type="submit" disabled={loading}>
         {loading ? (
           <>

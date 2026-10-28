@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import { useState, useEffect } from 'react';
 import {Form, InputGroup, Modal, Button, Table, ProgressBar}from 'react-bootstrap';
 // const s = useState(false)
@@ -27,6 +26,7 @@ export default function TransactionManager() {
 
   const ambilDataAsync = async () =>{
     try {
+      // Localhost requires an API server on port 3000 with CORS enabled; otherwise this request fails.
       const response = await fetch('http://localhost:3000/transaksi');
       if (!response.ok) {
         throw new Error ('Gagal mengambil data dari server');
